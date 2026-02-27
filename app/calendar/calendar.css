@@ -1,0 +1,11 @@
+.react-calendar {
+  width: 100% !important;
+  max-width: 1000px;
+  font-family: Arial, sans-serif;
+  line-height: 1.2;
+}
+
+.react-calendar__tile {
+  height: 100px;
+  padding: 4px;
+}
