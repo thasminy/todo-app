@@ -12,6 +12,7 @@ export default function TodosPage() {
 
   // Local filter states
   const [search, setSearch] = useState("");
+  const [dueDate, setDueDate] = useState("");
   const [filter, setFilter] = useState("all");
   const [sort, setSort] = useState("asc");
   const [perPage, setPerPage] = useState(5);
@@ -34,12 +35,15 @@ export default function TodosPage() {
       .filter(t =>
         activeTab === "all" ? true : t.category.toLowerCase() === activeTab.toLowerCase()
       )
+      .filter(t =>
+        dueDate ? t.endDate === dueDate : true
+      )
       .sort((a, b) =>
         sort === "asc"
           ? new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
           : new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
       );
-  }, [todos, search, filter, activeTab, sort]);
+  }, [todos, search, filter, activeTab, sort, dueDate]);
 
   // ===============================
   // 🔹 Pagination
@@ -62,6 +66,12 @@ export default function TodosPage() {
     setSearch(value);
     setCurrentPage(1);
   };
+
+
+  const handleDueDateChange = (value: string) => {
+    setDueDate(value);
+    setCurrentPage(1);
+  }
 
   const handleFilterChange = (value: string) => {
     setFilter(value);
@@ -90,7 +100,7 @@ export default function TodosPage() {
       />
 
       {/* 🔹 Category Tabs */}
-      <div style={{ display: "flex", gap: "12px", marginBottom: "18px" }}>
+      <div style={{ display: "inline-flex", gap: "12px", marginBottom: "18px", alignItems: "center" }}>
         {categories.map(cat => (
           <button
             key={cat}
@@ -108,6 +118,20 @@ export default function TodosPage() {
             {cat.charAt(0).toUpperCase() + cat.slice(1)}
           </button>
         ))}
+        {/* Due Date Filter */}
+        <input
+          type="date"
+          value={dueDate}
+          onChange={e => handleDueDateChange(e.target.value)}
+          style={{
+            marginLeft: "auto",
+            minWidth: "140px",
+            padding: "8px",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+          }}
+          aria-label="Filter by due date"
+        />
       </div>
 
       {/* 🔹 Todo List */}
